@@ -1,0 +1,39 @@
+name: exposure-check
+description: Fail the build if your deployed site serves .env files, .git folders, private keys, database dumps or backups.
+author: Sumit Kumar Das
+branding:
+  icon: shield
+  color: red
+inputs:
+  urls:
+    description: One or more URLs to check, separated by spaces, commas or new lines.
+    required: true
+  fail-on:
+    description: Minimum severity that fails the step (low, medium, high, critical).
+    required: false
+    default: medium
+  headers:
+    description: 'Optional request headers, one "Name: value" per line (for example to bypass preview protection).'
+    required: false
+    default: ""
+  timeout:
+    description: Per-request timeout in milliseconds.
+    required: false
+    default: "15000"
+runs:
+  using: composite
+  steps:
+    - name: Check for exposed files
+      shell: bash
+      env:
+        EC_URLS: ${{ inputs.urls }}
+        EC_FAIL_ON: ${{ inputs.fail-on }}
+        EC_HEADERS: ${{ inputs.headers }}
+        EC_TIMEOUT: ${{ inputs.timeout }}
+      run: |
+        args=()
+        while IFS= read -r line; do
+          [ -n "$line" ] && args+=(--header "$line")
+        done <<< "$EC_HEADERS"
+        # shellcheck disable=SC2086
+        node "${{ github.action_path }}/bin/cli.js" $EC_URLS --fail-on "$EC_FAIL_ON" --timeout "$EC_TIMEOUT" "${args[@]}"

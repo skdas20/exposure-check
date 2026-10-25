@@ -1,0 +1,23 @@
+name: Suggest a new check
+description: A sensitive file or path that exposure-check should detect
+labels: ["new check"]
+body:
+  - type: input
+    id: path
+    attributes:
+      label: Path
+      placeholder: /.env.staging
+    validations:
+      required: true
+  - type: textarea
+    id: signature
+    attributes:
+      label: How can we recognise the real file?
+      description: Something only the genuine file contains (a header, magic bytes, a key name). Please don't paste real secrets.
+    validations:
+      required: true
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Suggested severity
+      options: [critical, high, medium, low]

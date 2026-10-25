@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Node ${{ matrix.node }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [18, 20, 22, 24]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm test
+
+  action:
+    name: Action self-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Serve a deliberately exposed site
+        run: |
+          mkdir -p site/.git && printf 'API_KEY=dummy\n' > site/.env && printf '[core]\n' > site/.git/config
+          (cd site && python3 -m http.server 8080 >/dev/null 2>&1 &) && sleep 1
+      - name: Run the action (expected to fail)
+        id: scan
+        continue-on-error: true
+        uses: ./
+        with:
+          urls: http://127.0.0.1:8080
+      - name: Assert the exposure was detected
+        run: test "${{ steps.scan.outcome }}" = "failure"

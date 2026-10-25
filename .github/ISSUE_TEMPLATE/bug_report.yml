@@ -1,0 +1,23 @@
+name: Bug report
+description: A false positive, missed detection, or crash
+labels: ["bug"]
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Type
+      options: [False positive, Missed detection, Crash or error, Other]
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: The command you ran and the output (remove anything sensitive). For false positives, describe what the URL actually returns.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version and Node.js version
+      placeholder: "exposure-check 0.1.0, Node 22"

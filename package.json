@@ -1,0 +1,48 @@
+{
+  "name": "exposure-check",
+  "version": "0.1.0",
+  "description": "Check your website for publicly exposed .env files, .git folders, private keys, database dumps and backups. Zero-dependency CLI and GitHub Action.",
+  "type": "module",
+  "bin": {
+    "exposure-check": "bin/cli.js"
+  },
+  "main": "src/scan.js",
+  "exports": {
+    ".": "./src/scan.js"
+  },
+  "files": [
+    "bin",
+    "src"
+  ],
+  "scripts": {
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18.17"
+  },
+  "keywords": [
+    "security",
+    "scanner",
+    "dotenv",
+    "env",
+    "secrets",
+    "secret-detection",
+    "git-exposure",
+    "devsecops",
+    "github-action",
+    "deployment",
+    "vercel",
+    "netlify",
+    "cli"
+  ],
+  "author": "Sumit Kumar Das (https://github.com/skdas20)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/skdas20/exposure-check.git"
+  },
+  "bugs": {
+    "url": "https://github.com/skdas20/exposure-check/issues"
+  },
+  "homepage": "https://github.com/skdas20/exposure-check#readme"
+}
